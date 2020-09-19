@@ -16,7 +16,7 @@
 #include "dbus/dbus.hpp"
 
 // Enables logging of margin decisions
-static constexpr bool DEBUG = false;
+bool debugEnabled = false;
 
 int getSkuNum()
 {
@@ -202,7 +202,7 @@ void updateMarginTempLoop(
         for (int i = 0; i < numOfZones; i++)
         {
             // Begin a new zone line of space-separated sensors
-            if constexpr (DEBUG)
+            if (debugEnabled)
             {
                 // Get the map key at the Nth position within the map
                 auto t = skuConfig.begin();
@@ -284,7 +284,7 @@ void updateMarginTempLoop(
                 if (std::isnan(sensorRealTemp))
                 {
                     // Sensor failure, unable to get reading
-                    if constexpr (DEBUG)
+                    if (debugEnabled)
                     {
                         std::cerr << " ?";
                     }
@@ -303,7 +303,7 @@ void updateMarginTempLoop(
                     }
 
                     // Sensor successful, already in margin format
-                    if constexpr (DEBUG)
+                    if (debugEnabled)
                     {
                         std::cerr << " " << sensorRealTemp;
                     }
@@ -314,7 +314,7 @@ void updateMarginTempLoop(
                 if (std::isnan(sensorSpecTemp))
                 {
                     // Sensor failure, needed to know sensorSpecTemp to compute margin
-                    if constexpr (DEBUG)
+                    if (debugEnabled)
                     {
                         std::cerr << " ?";
                     }
@@ -346,7 +346,7 @@ void updateMarginTempLoop(
                 }
 
                 // Sensor successful, converted absolute to margin
-                if constexpr (DEBUG)
+                if (debugEnabled)
                 {
                     std::cerr << " " << sensorCalibTemp;
                 }
@@ -361,7 +361,7 @@ void updateMarginTempLoop(
             updateDbusMarginTemp(i, calibMarginTemp, skuConfig[i].first.second);
 
             // Finish sensor line, indicate computed worst margin
-            if constexpr (DEBUG)
+            if (debugEnabled)
             {
                 std::cerr << " => " << calibMarginTemp << std::endl;
             }

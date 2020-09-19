@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <filesystem>
 
 #include <nlohmann/json.hpp>
 
@@ -12,6 +13,9 @@
 
 constexpr auto marginConfigPath =
     "/usr/share/read-margin-temp/config-margin.json";
+
+constexpr auto debugEnablePath = "/etc/thermal.d/margindebug";
+extern bool debugEnabled;
 
 std::map<std::string, struct conf::sensorConfig> sensorConfig = {};
 conf::skuConfig skusConfig;
@@ -47,6 +51,12 @@ int main(int argc, char **argv)
     if (argc > 1)
     {
         configPath = argv[1];
+    }
+
+    if (std::filesystem::exists(debugEnablePath))
+    {
+        debugEnabled = true;
+        std::cerr << "Debug logging enabled\n";
     }
 
     run(configPath);
